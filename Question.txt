@@ -1,0 +1,52 @@
+1. Write a query to fetch ALTERNATE records from a STUDENT table. (EVEN Numbered Record).
+select * from (select mod(row_number()over(),2)R, student.*from student)t where R=0 ;
+
+2. Di splay the student detail that has joined the same batch of the student ‘pankaj’.
+select  namefirst ,emailed , dob from student, course_batches where student.id=course_batches.id and name= (select name from student, course_batches where student.id=course_batches.id and namefirst ='pankaj');
+
+
+3. Display all students who have taken admission in more than 2 batches.
+select namefirst,dob,emailid, batchid,count(batchid) from batch_students,student where student.id=batch_students.studentid group by batchid having count(batchid) >2;
+
+
+4. Display all courses where least number of students has taken the admission.
+
+
+5. Find the student details that have scored 3rd highest marks in 'BE'.
+select * from (select dense_rank()over(order by marks desc)r,student_qualifications.* from student_qualifications where name='be')t where  r=3 ;
+
+6. Write a query to count total student who have done 'BE' and year of passing is 2017.
+Select name,year, count(*) from student_qualifications where name='BE' and year='2017'
+
+
+7. Select all students records whose namefirst starts with 'S' and its length is 6 char.
+select * from student where namefirst like "s%"and length(namefirst=6);
+
+8. Write a query to fetch first 10 records from Student Table, arrange the records in ascending order of namefirst.
+select * from student order by namefirst limit 10;
+
+9. Write a query to display the student details along with their phone number who have more than one phone.
+select student.*, studentid , count(number) from student , student_phone where student.id = student_phone. studentid group by studentid having count(number)>1;
+
+10.    Write a query to display all students who are born in the year 1984.
+ select * from student where year(dob)=1984;
+
+Section B:  10 Marks 
+Write studentSearch Stored Procedure. Pass studentID as parameter, if the entered studentID is present in the STUDENT Table display the student details with his qualification details. If the studentID is not present then display the message “Student not found”.  
+   drop procedure if exists studentSearch;
+delimiter $
+create procedure studentSearch(_id  int,out msg varchar(50))
+begin
+declare  x  int ;
+select  student.id into x from student where student.id =_id;
+if x is not null then
+select * from student ,student_qualifications where student.id=student_qualifications.studentid;
+else
+set msg = "student not found " ;
+end if ;
+end  $
+delimiter  ;  
+
+hi 
+bye   
+
