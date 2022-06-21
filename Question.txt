@@ -47,6 +47,6 @@ end if ;
 end  $
 delimiter  ;  
 
-hi 
-bye   
+git version 
+ 
 
